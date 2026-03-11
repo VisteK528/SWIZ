@@ -1,0 +1,41 @@
+services:
+  binpicking:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+      args:
+        ROS_DISTRO: jazzy
+    image: swiz-binpicking:latest
+    command: bash
+    stdin_open: true
+    tty: true
+    network_mode: host
+    ipc: host
+    runtime: nvidia
+    environment:
+      TERM: xterm-256color
+      ROS_DOMAIN_ID: 87
+      DISPLAY: ${DISPLAY}
+      # Force NVIDIA GPU usage
+      __NV_PRIME_RENDER_OFFLOAD: 1
+      __VK_LAYER_NV_optimus: NVIDIA_only
+      __GLX_VENDOR_LIBRARY_NAME: nvidia
+      NVIDIA_DRIVER_CAPABILITIES: all
+      NVIDIA_VISIBLE_DEVICES: all
+      # Gazebo specific settings
+      GZ_SIM_RENDER_ENGINE: ogre2
+      GZ_IP: 127.0.0.1
+      GZ_PARTITION: docker_sim
+      # Prevent AMDGPU errors
+      DISABLE_AMDGPU: 1
+      # Use EGL instead of GLX if needed
+      USE_EGL: 1
+      SSH_AUTH_SOCK: /run/host-services/ssh-auth.sock
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${PWD}:/ws/src:rw
+      - /dev/shm:/dev/shm:rw
+      - ${HOME}/.Xauthority:/root/.Xauthority:rw
+      - ${SSH_AUTH_SOCK}:/run/host-services/ssh-auth.sock
+      - ${PWD}/src/.mixins/:/root/.colcon/mixin/dev:rw
+    shm_size: "1g"
