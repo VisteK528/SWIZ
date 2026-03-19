@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="drc_practice_blue_cylinder">
+    <link name="link">
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.0002</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0002</iyy>
+          <iyz>0</iyz>
+          <izz>0.0001</izz>
+        </inertia>
+      </inertial>
+  <visual name="visual">
+    <geometry>
+      <mesh>
+        <uri>model://drc_practice_blue_cylinder/meshes/cylinder.dae</uri>
+        <scale>0.08 0.08 0.08</scale> </mesh>
+    </geometry>
+  </visual>
+
+  <collision name="collision">
+    <pose>0 0 0.03452 0 0 0</pose> 
+    <geometry>
+      <cylinder>
+        <radius>0.02232</radius> <length>0.06904</length> </cylinder>
+    </geometry>
+  </collision>
+</link>
+  </model>
+</sdf>

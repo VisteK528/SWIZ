@@ -52,13 +52,15 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         get_package_share_directory('swiz_binpicking'))
 
     bridge_params = os.path.join(get_package_share_directory(
-        robot_description_package), 'config', 'gz_bridge.yaml')
+        robot_description_package), 'config', 'calibration_camera_gz_bridge.yaml')
 
-    ur_controllers_config = os.path.join(get_package_share_directory(
-        robot_description_package), 'config', 'ur_controllers.yaml')
-
-    xacro_file = os.path.join(get_package_share_directory(
-        robot_description_package), 'urdf','ur_with_gripper.urdf.xacro')
+    
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('ros_gz_sim'), 'launch', 'gz_sim.launch.py')]),
+        launch_arguments={'gz_args': [
+            '-r -v4 ', world_file], 'on_exit_shutdown': 'true', "emulate_tty": 'true'}.items()
+    )
 
     ros_gz_bridge = Node(
         package="ros_gz_bridge",
@@ -79,23 +81,10 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         value=gz_resource
     )
 
-    gripper_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["gripper_controller", "-c", "/controller_manager"],
-    )
-
-    ur_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('ur_simulation_gz'), 'launch', 'ur_sim_control.launch.py')]),
-        launch_arguments={"world_file": world_file, "description_file": xacro_file, "controllers_file": ur_controllers_config}.items()
-    )
-
     return [
         gz_environment,
-        ur_launch,
-        gripper_controller_spawner,
-        ros_gz_bridge,
+        gazebo,
+        ros_gz_bridge
     ]
 
 
