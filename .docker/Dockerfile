@@ -8,7 +8,6 @@ RUN apt-get update \
     && \
     : "remove cache" && \
     apt-get autoremove -y -qq && \
-    apt install libserial-dev -y && \
     apt install ros-$ROS_DISTRO-ros2-control ros-$ROS_DISTRO-ros2-controllers ros-$ROS_DISTRO-gz-ros2-control -y && \
     rm -rf /var/lib/apt/lists/*
 
@@ -22,22 +21,18 @@ RUN curl https://packages.osrfoundation.org/gazebo.gpg --output /usr/share/keyri
 
 # Install ROS dependencies
 RUN apt-get update && apt-get install -y \
-    ros-$ROS_DISTRO-rmw-cyclonedds-cpp \
     ros-$ROS_DISTRO-spatio-temporal-voxel-layer \
     ros-$ROS_DISTRO-rqt-graph \
     ros-$ROS_DISTRO-perception-pcl \
     ros-$ROS_DISTRO-pcl-msgs \
-    ros-$ROS_DISTRO-navigation2 \
-    ros-$ROS_DISTRO-nav2-bringup \
-    ros-$ROS_DISTRO-nav2-minimal-tb* \
-    ros-$ROS_DISTRO-robot-localization \
     ros-$ROS_DISTRO-vision-opencv \
-    ros-$ROS_DISTRO-rtabmap-ros \
     ros-$ROS_DISTRO-plotjuggler-ros \
     ros-$ROS_DISTRO-rqt \
     ros-$ROS_DISTRO-rqt-common-plugins \
     ros-$ROS_DISTRO-rviz2 \
     ros-$ROS_DISTRO-joy \
+    ros-$ROS_DISTRO-ur-description \
+    ros-$ROS_DISTRO-ur-moveit-config \
     libxcb-cursor0 \
     libxcb-cursor-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -65,6 +60,25 @@ RUN echo 'source /usr/lib/git-core/git-sh-prompt 2>/dev/null' >> ~/.bashrc && \
 # Shell setup
 RUN echo "source /opt/ros/\$ROS_DISTRO/setup.bash" >> ~/.bashrc && \
     echo "if [ -f /ws/install/setup.bash ]; then source /ws/install/setup.bash; fi" >> ~/.bashrc
+
+WORKDIR /other_ws
+
+RUN mkdir -p src && \
+    git clone https://github.com/UniversalRobots/Universal_Robots_ROS2_GZ_Simulation.git -b ros2 src/ur_simulation_gz/ && \
+    git clone https://github.com/PickNikRobotics/ros2_robotiq_gripper.git src/ros2_robotiq_gripper
+
+RUN rm -rf src/ros2_robotiq_gripper/robotiq_driver \
+           src/ros2_robotiq_gripper/robotiq_hardware_tests \
+           src/ros2_robotiq_gripper/robotiq_driver_example
+
+RUN apt-get update && \
+    rosdep update && \
+    rosdep install --from-paths src --ignore-src -y --rosdistro jazzy
+
+RUN . /opt/ros/jazzy/setup.sh && \
+    colcon build --symlink-install --packages-skip robotiq_driver
+
+RUN echo "source /other_ws/install/setup.bash" >> ~/.bashrc
 
 WORKDIR /ws
 

@@ -141,11 +141,11 @@
               <env_texture_size>2048</env_texture_size>
             </lens>
 
-            <!-- <noise>
+            <noise>
               <type>gaussian</type>
               <mean>0.0</mean>
               <stddev>0.005</stddev>
-            </noise> -->
+            </noise>
           </camera>
         </sensor>
       </link>
@@ -187,11 +187,11 @@
               <env_texture_size>2048</env_texture_size>
             </lens>
 
-            <!-- <noise>
+            <noise>
               <type>gaussian</type>
               <mean>0.0</mean>
               <stddev>0.005</stddev>
-            </noise> -->
+            </noise>
           </camera>
         </sensor>
       </link>

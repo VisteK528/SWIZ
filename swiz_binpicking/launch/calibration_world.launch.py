@@ -20,7 +20,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     if len(avaliable_worlds) == 0:
         raise ValueError(f"No world available in specified directory")
 
-    world_name = LaunchConfiguration('world').perform(context)    
+    world_name = "calibration"
 
     gazebo_models_share = os.path.join(
         os.path.dirname(get_package_share_directory('swiz_binpicking')),
@@ -90,11 +90,5 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
 
 def generate_launch_description():
     return LaunchDescription([
-        DeclareLaunchArgument(
-            'world',
-            default_value='empty',
-            description='World to load'
-        ),
-
         OpaqueFunction(function=launch_setup),
     ])

@@ -56,6 +56,35 @@
   <pose>0.0 0.6 0.8 0 0.0 0.0</pose>
   </include>
 
+  <!-- UR base-->
+  <model name='gray_box'>
+    <static>false</static>
+    <link name='link'>
+      <pose>0 0 0.15 0 0 0</pose>
+      
+      <collision name='collision'>
+        <geometry>
+          <box>
+            <size>0.4 0.4 0.3</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <visual name='visual'>
+        <geometry>
+          <box>
+            <size>0.4 0.4 0.3</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.5 0.5 0.5 1</ambient>
+          <diffuse>0.5 0.5 0.5 1</diffuse>
+          <specular>0.1 0.1 0.1 1</specular>
+        </material>
+      </visual>
+    </link>
+  </model>
+
     <model name='box'>
       <pose>8.0 0 2.5 9.3851161270657419e-17
         -5.6069031016222445e-17 -3.9093360295039407e-19</pose>
@@ -105,96 +134,43 @@
       <self_collide>false</self_collide>
     </model>
 
-    <model name="left_camera">
+   <model name="rgbd_camera">
       <static>true</static>
-      <pose>0.05 0.6 1.0 0 0.0 0.0</pose>
+      <pose>0.0 0.6 1.2 0 1.5707 0</pose> 
+      
       <link name="link">
         <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.1 0.1 0.1</size>
-            </box>
-          </geometry>
+          <geometry><box><size>0.05 0.05 0.05</size></box></geometry>
+          <material>
+            <ambient>0.1 0.1 0.1 1</ambient>
+            <diffuse>0.1 0.1 0.1 1</diffuse>
+          </material>
         </visual>
-        <sensor name="camera" type="wideanglecamera">
-          <pose>0 0 0 0 1.570796327 0</pose>
-          <topic>left_camera</topic>
-          <visualize>true</visualize>
-          <update_rate>30</update_rate>
-          <always_on>true</always_on>
 
+        <sensor name="camera" type="rgbd">
+          <topic>rgbd_camera</topic>
+          <update_rate>30</update_rate>
+          <gz_frame_id>rgbd_camera_link_optical</gz_frame_id>
           <camera>
-            <horizontal_fov>1.9</horizontal_fov>
-            <image>
-              <width>1920</width>
-              <height>1080</height>
+            <horizontal_fov>0.95</horizontal_fov> <image>
+              <width>640</width>
+              <height>480</height>
+              <format>R8G8B8</format>
             </image>
             <clip>
               <near>0.1</near>
-              <far>100</far>
+              <far>10.0</far>
             </clip>
-
-            <lens>
-              <type>equidistant</type>
-              <scale_to_hfov>true</scale_to_hfov>
-              <cutoff_angle>1.5707</cutoff_angle>
-              <env_texture_size>2048</env_texture_size>
-            </lens>
-
-            <!-- <noise>
-              <type>gaussian</type>
-              <mean>0.0</mean>
-              <stddev>0.005</stddev>
-            </noise> -->
           </camera>
         </sensor>
       </link>
-    </model>
 
-    <model name="right_camera">
-      <static>true</static>
-      <pose>-0.05 0.6 1.0 0 0.0 0.0</pose>
-      <link name="link">
-        <visual name="visual">
-          <geometry>
-            <box>
-              <size>0.1 0.1 0.1</size>
-            </box>
-          </geometry>
-        </visual>
-        <sensor name="camera" type="wideanglecamera">
-          <pose>0 0 0 0 1.570796327 0</pose>
-          <topic>right_camera</topic>
-          <visualize>true</visualize>
-          <update_rate>30</update_rate>
-          <always_on>true</always_on>
-
-          <camera>
-            <horizontal_fov>1.9</horizontal_fov>
-            <image>
-              <width>1920</width>
-              <height>1080</height>
-            </image>
-            <clip>
-              <near>0.1</near>
-              <far>100</far>
-            </clip>
-
-            <lens>
-              <type>equidistant</type>
-              <scale_to_hfov>true</scale_to_hfov>
-              <cutoff_angle>1.5707</cutoff_angle>
-              <env_texture_size>2048</env_texture_size>
-            </lens>
-
-            <!-- <noise>
-              <type>gaussian</type>
-              <mean>0.0</mean>
-              <stddev>0.005</stddev>
-            </noise> -->
-          </camera>
-        </sensor>
-      </link>
+      <plugin
+        filename="gz-sim-pose-publisher-system"
+        name="gz::sim::systems::PosePublisher">
+        <publish_link_pose>true</publish_link_pose>
+        <use_designer_link_names>true</use_designer_link_names>
+      </plugin>
     </model>
 
 

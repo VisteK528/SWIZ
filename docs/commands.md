@@ -1,11 +1,21 @@
+## Uruchomienie świata kalibracyjnego
 ```bash
-ros2 run ros_gz_bridge parameter_bridge "front_camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo" "front_camera/depth_image@sensor_msgs/msg/Image[gz.msgs.Image" "front_camera/image@sensor_msgs/msg/Image[gz.msgs.Image"
+ros2 launch swiz_binpicking calibration_world.launch.py
 ```
 
+## Uruchomienie świata z manipulatorem
 ```bash
-ros2 run ros_gz_bridge parameter_bridge "front_camera@sensor_msgs/msg/Image[gz.msgs.Image"
+ros2 launch swiz_binpicking ur_world.launch.py
 ```
+
+### Podgląd video z kamery
 
 ```bash
 ros2 run rqt_image_view rqt_image_view
+```
+
+### Ruch grippera
+
+```bash
+ros2 action send_goal /gripper_controller/gripper_cmd control_msgs/action/GripperCommand "{command: {position: 0.2, max_effort: 50.0}}"
 ```

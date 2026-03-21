@@ -20,7 +20,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     if len(avaliable_worlds) == 0:
         raise ValueError(f"No world available in specified directory")
 
-    world_name = LaunchConfiguration('world').perform(context)    
+    world_name = "ur"
 
     gazebo_models_share = os.path.join(
         os.path.dirname(get_package_share_directory('swiz_binpicking')),
@@ -51,6 +51,8 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
     desc_share = os.path.dirname(
         get_package_share_directory('swiz_binpicking'))
 
+    gripper_desc = os.path.dirname(get_package_share_directory("robotiq_description"))
+
     bridge_params = os.path.join(get_package_share_directory(
         robot_description_package), 'config', 'gz_bridge.yaml')
 
@@ -72,7 +74,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         emulate_tty=True
     )
 
-    gz_resource = f"{desc_share}:{world_dir}:{gazebo_models_share}"
+    gz_resource = f"{gripper_desc}:{desc_share}:{world_dir}:{gazebo_models_share}"
 
     gz_environment = SetEnvironmentVariable(
         name='GZ_SIM_RESOURCE_PATH',
@@ -91,21 +93,22 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         launch_arguments={"world_file": world_file, "description_file": xacro_file, "controllers_file": ur_controllers_config}.items()
     )
 
+    static_tf = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0', '0.6', '1.2', '0', '1.5707', '0', 'world', 'rgbd_camera_link_optical']
+    )
+
     return [
         gz_environment,
         ur_launch,
         gripper_controller_spawner,
         ros_gz_bridge,
+        static_tf
     ]
 
 
 def generate_launch_description():
     return LaunchDescription([
-        DeclareLaunchArgument(
-            'world',
-            default_value='empty',
-            description='World to load'
-        ),
-
         OpaqueFunction(function=launch_setup),
     ])
