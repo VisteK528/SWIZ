@@ -2,10 +2,10 @@ services:
   binpicking:
     build:
       context: .
-      dockerfile: .docker/Dockerfile
+      dockerfile: .docker/Dockerfile.ghcr
       args:
         ROS_DISTRO: jazzy
-    image: swiz-binpicking:latest
+    image: ghcr.io/vistek528/swiz:latest
     container_name: swiz-binpicking
     command: bash
     stdin_open: true
