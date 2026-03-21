@@ -1,13 +1,13 @@
+# Systemy wizyjne 3D - binpicking 
 
+Projekt polega na opracowaniu systemu wizyjnego do lokalizacji chaotycznie ułożonych detali w koszu produkcyjnym. Otrzymana w ten sposób poza powinna umożliwić manipulatorowi opracowanie trajektorii i dokonanie chwytu.
 
-```bash
-ros2 run ros_gz_bridge parameter_bridge "front_camera/camera_info@sensor_msgs/msg/CameraInfo[gz.msgs.CameraInfo" "front_camera/depth_image@sensor_msgs/msg/Image[gz.msgs.Image" "front_camera/image@sensor_msgs/msg/Image[gz.msgs.Image"
-```
+## Dokumentacja [PL]
+[Dokumentacja wstępna](./docs/project-stage-1.md)
 
-```bash
-ros2 run ros_gz_bridge parameter_bridge "front_camera@sensor_msgs/msg/Image[gz.msgs.Image"
-```
+## Środowisko
+[Setup środowiska](./docs/environment_setup.md)
 
-```bash
-ros2 run rqt_image_view rqt_image_view
-```
+## Useful commands
+[Commands](./docs/commands.md)
+
