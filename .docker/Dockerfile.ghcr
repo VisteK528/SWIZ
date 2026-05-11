@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y \
     ros-$ROS_DISTRO-joy \
     ros-$ROS_DISTRO-ur-description \
     ros-$ROS_DISTRO-ur-moveit-config \
+    ros-$ROS_DISTRO-cv-bridge \
     libxcb-cursor0 \
     libxcb-cursor-dev \
     && rm -rf /var/lib/apt/lists/*
@@ -44,13 +45,18 @@ RUN apt-get update && apt-get install -y \
     gdb \
     nano \
     python3-pip \
+    python3.12-venv \
+    clang-format \
     && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /ws
+RUN python3 -m venv .venv --system-site-packages \
+    && source /ws/.venv/bin/activate \
+    && pip3 install "numpy<2" ultralytics open3d opencv-python colcon-common-extensions
+
 # Formatting tools
-RUN apt-get update && apt-get install -y \
-    clang-format \
-    && pip install ruff --break-system packages \
-    && rm -rf /var/lib/apt/lists/*
+RUN source /ws/.venv/bin/activate \
+    && pip install ruff
 
 # Colors in terminal
 RUN echo 'source /usr/lib/git-core/git-sh-prompt 2>/dev/null' >> ~/.bashrc && \
@@ -59,7 +65,10 @@ RUN echo 'source /usr/lib/git-core/git-sh-prompt 2>/dev/null' >> ~/.bashrc && \
 
 # Shell setup
 RUN echo "source /opt/ros/\$ROS_DISTRO/setup.bash" >> ~/.bashrc && \
-    echo "if [ -f /ws/install/setup.bash ]; then source /ws/install/setup.bash; fi" >> ~/.bashrc
+    echo "if [ -f /other_ws/install/setup.bash ]; then source /other_ws/install/setup.bash; fi" >> ~/.bashrc && \
+    echo "if [ -f /ws/install/setup.bash ]; then source /ws/install/setup.bash; fi" >> ~/.bashrc && \
+    echo "source /ws/.venv/bin/activate" >> ~/.bashrc && \
+    echo 'export PYTHONPATH="/ws/.venv/lib/python3.12/site-packages:$PYTHONPATH"' >> ~/.bashrc
 
 WORKDIR /other_ws
 
@@ -68,8 +77,8 @@ RUN mkdir -p src && \
     git clone https://github.com/PickNikRobotics/ros2_robotiq_gripper.git src/ros2_robotiq_gripper
 
 RUN rm -rf src/ros2_robotiq_gripper/robotiq_driver \
-           src/ros2_robotiq_gripper/robotiq_hardware_tests \
-           src/ros2_robotiq_gripper/robotiq_driver_example
+    src/ros2_robotiq_gripper/robotiq_hardware_tests \
+    src/ros2_robotiq_gripper/robotiq_driver_example
 
 RUN apt-get update && \
     rosdep update && \
@@ -81,6 +90,12 @@ RUN . /opt/ros/jazzy/setup.sh && \
 RUN echo "source /other_ws/install/setup.bash" >> ~/.bashrc
 
 WORKDIR /ws
+
+RUN mkdir src/ \
+    && git clone -b feat/segmentation https://github.com/VisteK528/SWIZ.git src/ \
+    && source /ws/.venv/bin/activate \
+    && source /opt/ros/jazzy/setup.sh \
+    && colcon build --symlink-install && source install/setup.bash
 
 COPY .docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh

@@ -34,7 +34,6 @@ services:
       SSH_AUTH_SOCK: /run/host-services/ssh-auth.sock
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ${PWD}:/ws/src:rw
       - /dev/shm:/dev/shm:rw
       - ${HOME}/.Xauthority:/root/.Xauthority:rw
       - ${SSH_AUTH_SOCK}:/run/host-services/ssh-auth.sock
