@@ -25,7 +25,7 @@
   direction: GZ_TO_ROS
 
 # Camera Info
-- gz_topic_name: "/camera/camera_info"
+- gz_topic_name: "/rgbd_camera/camera_info"
   ros_topic_name: "/camera/color/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
