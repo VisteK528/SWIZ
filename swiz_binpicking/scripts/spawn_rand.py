@@ -7,7 +7,7 @@ BASE_Y = 0.62
 BASE_Z = 1.2
 MODEL_PATH = "/ws/install/swiz_binpicking/share/swiz_binpicking/worlds/ur/models/drc_practice_blue_cylinder/model.sdf"
 
-for i in range(1, 6):
+for i in range(1, 35):
     x = BASE_X + random.uniform(-0.1, 0.1)
     y = BASE_Y + random.uniform(-0.1, 0.1)
     z = BASE_Z + (i * 0.15)

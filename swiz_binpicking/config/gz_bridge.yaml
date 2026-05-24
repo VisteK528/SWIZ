@@ -37,8 +37,7 @@
   gz_type_name: "gz.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
 
-- gz_topic_name: "/model/rgbd_camera/pose_static"
-  ros_topic_name: "/tf"
-  ros_type_name: "tf2_msgs/msg/TFMessage"
-  gz_type_name: "gz.msgs.Pose_V"
-  direction: GZ_TO_ROS
+# Camera TF is published by static_transform_publisher in ur_world.launch.py.
+# Do NOT bridge /model/rgbd_camera/pose_static here — that plugin fires at
+# the physics step rate and creates a second, conflicting TF source for
+# rgbd_camera_link_optical, causing "jumped back in time" spam in every node.
