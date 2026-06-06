@@ -75,6 +75,13 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         emulate_tty=True,
     )
 
+    cylinder_ground_truth_pub = Node(
+        package="swiz_detection",
+        executable="ground_truth_publisher",
+        output="screen",
+        emulate_tty=True,
+    )
+
     gz_resource = f"{gripper_desc}:{desc_share}:{world_dir}:{gazebo_models_share}"
 
     gz_environment = SetEnvironmentVariable(
@@ -134,6 +141,7 @@ def launch_setup(context: LaunchContext, *args, **kwargs):
         ur_launch,
         gripper_controller_spawner,
         ros_gz_bridge,
+        cylinder_ground_truth_pub,
         static_tf,
     ]
 
