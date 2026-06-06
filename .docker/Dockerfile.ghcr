@@ -52,7 +52,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /ws
 RUN python3 -m venv .venv --system-site-packages \
     && source /ws/.venv/bin/activate \
-    && pip3 install "numpy<2" ultralytics open3d opencv-python colcon-common-extensions
+    && pip3 install "numpy<2" ultralytics open3d opencv-python colcon-common-extensions pyransac3d lap
 
 # Formatting tools
 RUN source /ws/.venv/bin/activate \

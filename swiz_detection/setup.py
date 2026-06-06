@@ -25,6 +25,8 @@ setup(
         "console_scripts": [
             "segmentation = swiz_detection.segmentation:main",
             "data_collector = swiz_detection.data_collector:main",
+            "ground_truth_publisher = swiz_detection.ground_truth_publisher:main",
+            "evaluation = swiz_detection.evaluation_node:main",
         ],
     },
 )
