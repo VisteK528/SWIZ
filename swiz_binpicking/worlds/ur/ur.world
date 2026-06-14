@@ -8,17 +8,17 @@
     </plugin>
 
     <physics name="ode_tuned" type="ode">
-      <max_step_size>0.001</max_step_size>
+      <max_step_size>0.004</max_step_size>
       <real_time_factor>1.0</real_time_factor>
       <ode>
         <solver>
-          <type>world</type>                          
-          <iters>200</iters>                         
-          <sor>1.3</sor>                              
+          <type>world</type>
+          <iters>200</iters>
+          <sor>1.3</sor>
         </solver>
         <constraints>
-          <cfm>1e-6</cfm>                             
-          <erp>0.2</erp>                              
+          <cfm>1e-6</cfm>
+          <erp>0.2</erp>
         </constraints>
       </ode>
     </physics>
@@ -61,7 +61,7 @@
     <static>false</static>
     <link name='link'>
       <pose>0 0 0.15 0 0 0</pose>
-      
+
       <collision name='collision'>
         <geometry>
           <box>
@@ -136,8 +136,8 @@
 
    <model name="rgbd_camera">
       <static>true</static>
-      <pose>0.0 0.6 1.2 0 1.5707 0</pose> 
-      
+      <pose>0.0 0.6 1.2 0 1.5707 0</pose>
+
       <link name="link">
         <visual name="visual">
           <geometry><box><size>0.05 0.05 0.05</size></box></geometry>
